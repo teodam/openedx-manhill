@@ -1,6 +1,7 @@
 """TO-DO: Write a description of what this XBlock is."""
 
 import pkg_resources
+from algos import Algos
 
 from xblock.core import XBlock
 from xblock.fields import Scope, Integer
@@ -20,6 +21,12 @@ class FourmisXBlock(XBlock):
         default=0, scope=Scope.user_state,
         help="A simple counter, to show something happening",
     )
+
+    ok = Integer(
+        default = 2
+    )
+
+    message = Algos().test()
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -60,8 +67,6 @@ class FourmisXBlock(XBlock):
         return [
             ("FourmisXBlock",
              """<vertical_demo>
-                <fourmis/>
-                <fourmis/>
                 <fourmis/>
                 </vertical_demo>
              """),
