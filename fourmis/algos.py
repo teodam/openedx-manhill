@@ -14,17 +14,17 @@ class Algos(object):
 
 	def suggestions(tableau):
 		n=len(tableau)
-		max1=-1
-		max2=-1
-		max3=-1
+		max1=[-1,-1]
+		max2=[-1,-1]
+		max3=[-1,-1]
 
 		for i in range(0,n):
 			score=tableau[i][2]-tableau[i][3]
 			if compare(tableau[i][0],tableau[i][1],previous):
 				score*=0.1
-			if score>max1:
-				max1=score
-			elif score>max2:
-				max2=score
-			elif score>max3:
-				max3=score
+			if score>max1[0]:
+				max1=[score,i]
+			elif score>max2[0]:
+				max2=[score,i]
+			elif score>max3[0]:
+				max3=[score,i]
