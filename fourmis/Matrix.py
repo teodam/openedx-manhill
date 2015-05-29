@@ -18,4 +18,4 @@ class Matrix(object):
     	return
 
     def erosion(j,coeff):
-    	return
+    	
