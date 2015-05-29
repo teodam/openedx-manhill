@@ -8,23 +8,25 @@ class Matrix(object):
     add(1,2,PHENOM_PLUS,  2)
     add(1,2,PHENOM_MOINS, 2)
 
-    def exist(i,j)
-        
+    def exist(i,j,previous):
+       x = self.table[i][0]
+       y = self.table[i][1]
 
+       if ( (x == previous[j+1]) && (y == previous[j]) ):
+            return 1
+        else:
+            return 0
 
-    def setRetribution(previous, success):
+    def retribution(previous, success):
         n=len(self.table)
         m=len(previous)
-        for i in range(0,n):
-            for j in range(0,m):
-                if (success==1):
-                   exist( self.table[i], (previous[i+1],previous[i]) )
-                else:
-
-
-
-    def get(i,j,k):
-        return
+        if m>=4:
+            pheromones=10
+            for i in range(0,n):
+                for j in range(0,3):
+                    var=pheromones/(j+2)
+                    if exist(i,j, previous):
+                        self.table[i][3-success]+= var
 
     def erosion(j, coeff):
         n = len(self.table)
