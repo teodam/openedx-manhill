@@ -1,5 +1,5 @@
 /* Javascript for FourmisXBlock. */
-var urlApi = "http://127.0.0.1:8000/api/"
+var urlApi = "http://127.0.0.1:8000"
 
 function FourmisXBlock(runtime, element) {
 
@@ -18,7 +18,7 @@ function FourmisXBlock(runtime, element) {
       })
     }
 
-    $.getJSON(urlApi+"course_structure/v0/courses",function(datas){
+    $.getJSON(urlApi+"/api/course_structure/v0/courses",function(datas){
       addElt(datas.results);
       console.log(datas.results)
     });
@@ -43,9 +43,9 @@ function FourmisXBlock(runtime, element) {
       var img2 = document.getElementById("imglien2");
       var img3 = document.getElementById("imglien3");
 
-      img1.src = elt[0].img
-      img2.src = elt[1].img
-      img3.src = elt[2].img
+      //img1.src = urlApi + elt[0].img
+      //img2.src = urlApi + elt[1].img
+      //img3.src = urlApi + elt[2].img
 
     }
 
