@@ -1,0 +1,9 @@
+/* CSS for FourmisXBlock */
+
+.fourmis_block .count {
+    font-weight: bold;
+}
+
+.fourmis_block p {
+    cursor: pointer;
+}
