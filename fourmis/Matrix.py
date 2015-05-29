@@ -2,11 +2,12 @@ class Matrix(object):
 	# i = from
 	# j = to
     def __init__():
-        self.table=[] 
+        self.table=[]
 
     Matrix.add(1,2,1,3)
     add(1,2,PHENOM_PLUS,  2)
     add(1,2,PHENOM_MOINS, 2)
+
 
     def exist(i,j,previous):
        x = self.table[i][0]
