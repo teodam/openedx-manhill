@@ -49,15 +49,15 @@ class FourmisXBlock(XBlock):
     # TO-DO: change this handler to perform your own actions.  You may need more
     # than one handler, or you may not need any handlers at all.
     @XBlock.json_handler
-    def increment_count(self, data, suffix=''):
+    def fourmisAlgo(self, data, suffix=''):
         """
         An example handler, which increments the data.
         """
         # Just to show data coming in...
-        assert data['hello'] == 'world'
+        assert data['choix']
+        datas = [{"name":"cours1","img":""},{"name":"cours2","img":""},{"name":"cours3","img":""}];
 
-        self.count += 1
-        return {"count": self.count}
+        return datas
 
     # TO-DO: change this to create the scenarios you'd like to see in the
     # workbench while developing your XBlock.

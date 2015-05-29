@@ -23,38 +23,44 @@ function FourmisXBlock(runtime, element) {
       console.log(datas.results)
     });
 
-  //  var handlerUrl = runtime.handlerUrl(element, 'increment_count');
+    function updateVotes(votes) {
+      console.log(votes)
+    }
 
-    $('a', element).click(function(eventObject) {
-       var rep = confirm("coucou")
-       console.log(rep)
-    });
+    function initLiens(datas) {
 
-    function initLiens(elt) {
       var lien1 = document.getElementById("lien1");
       var lien2 = document.getElementById("lien2");
       var lien3 = document.getElementById("lien3");
 
-      lien1.text = elt[0].name
-      lien2.text = elt[1].name
-      lien3.text = elt[2].name
+      lien1.text = datas[0].name
+      lien2.text = datas[1].name
+      lien3.text = datas[2].name
 
       var img1 = document.getElementById("imglien1");
       var img2 = document.getElementById("imglien2");
       var img3 = document.getElementById("imglien3");
 
-      //img1.src = urlApi + elt[0].img
-      //img2.src = urlApi + elt[1].img
-      //img3.src = urlApi + elt[2].img
+      //img1.src = urlApi + datas[0].img
+      //img2.src = urlApi + datas[1].img
+      //img3.src = urlApi + datas[2].img
 
     }
+
+    var handlerUrl = runtime.handlerUrl(element, 'fourmisAlgo');
 
     $('button', element).click(function(eventObject) {
         document.getElementById("cours").style.display = 'block';
         document.getElementById("choix").style.display = 'none';
 
-        datas = [{"name":"cours1","img":""},{"name":"cours2","img":""},{"name":"cours3","img":""}]
-        initLiens(datas);
+        var rep = true
+
+        $.ajax({
+            type: "POST",
+            url: handlerUrl,
+            data: JSON.stringify({"choix": rep}),
+            success: initLiens
+        });
     });
 
     document.getElementById("cours").style.display = 'none';
