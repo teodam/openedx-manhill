@@ -4,7 +4,7 @@ import pkg_resources
 from algos import Algos
 
 from xblock.core import XBlock
-from xblock.fields import Scope, Integer
+from xblock.fields import Scope, Integer, List, String
 from xblock.fragment import Fragment
 
 
@@ -22,11 +22,20 @@ class FourmisXBlock(XBlock):
         help="A simple counter, to show something happening",
     )
 
+    previous = List(
+        default=[],scope=Scope.user_info,
+        help="User path accross application"
+    )
+
+    matrice = String(
+        default='',
+        scope=Scope.preferences
+        help="Matrice d'informations"
+    )
+
     ok = Integer(
         default = 2
     )
-
-    message = Algos().test()
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -39,6 +48,8 @@ class FourmisXBlock(XBlock):
         The primary view of the FourmisXBlock, shown to students
         when viewing courses.
         """
+        self.pervious_s = 'previous : '.join(str(e) for e in self.previous)
+
         html = self.resource_string("static/html/fourmis.html")
         frag = Fragment(html.format(self=self))
         frag.add_css(self.resource_string("static/css/fourmis.css"))
@@ -48,6 +59,13 @@ class FourmisXBlock(XBlock):
 
     # TO-DO: change this handler to perform your own actions.  You may need more
     # than one handler, or you may not need any handlers at all.
+
+    @XBlock.json_handler
+    def nextPage(self,data,suffix=''):
+        self.previous.insert(0,data['id'])
+        return {'success' : 'true','url': data['id']}
+
+
     @XBlock.json_handler
     def fourmisAlgo(self, data, suffix=''):
         """
@@ -55,7 +73,7 @@ class FourmisXBlock(XBlock):
         """
         # Just to show data coming in...
         assert data['choix']
-        datas = [{"name":"cours1","img":""},{"name":"cours2","img":""},{"name":"cours3","img":""}];
+        datas = [{"name":"cours1","id":"cours1","img":""},{"name":"cours2","id":"cours2","img":""},{"name":"cours3","id":"cours3","img":""}];
 
         return datas
 
