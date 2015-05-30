@@ -22,7 +22,7 @@ def package_data(pkg, roots):
 
 setup(
     name='fourmis-xblock',
-    version='0.1',
+    version='0.2.1',
     description='fourmis XBlock',   # TODO: write a better description.
     packages=[
         'fourmis',
