@@ -4,13 +4,14 @@ class Algos(object):
 		return "MON TEST"
 
 	def compare(self,i,j,previous):
-		for element in previous:
-			x = element[0]
-			y = element[1]
+		for k in len(previous):
+			x = previous[k][0]
+			y = previous[k][1]
 
 			if ( (x==i) and (y==j) ):
-				return 1
-		return 0
+				val =  (i > 20 ? (i-20)*0.1 : 0.1) # Oubli des cours (Au bout d'un certain on ne prend plus en compte le fait que l'utilisateur ait déjà suivi ce cours)
+				return (val > 1) ? 1 : val
+		return 1
 
 	def suggestions(self,tableau,previous):
 		n=len(tableau)
@@ -20,8 +21,7 @@ class Algos(object):
 
 		for i in range(0,n):
 			score=tableau[i][2]-tableau[i][3]
-			if self.compare(tableau[i][0],tableau[i][1],previous):
-				score*=0.1
+			score*=self.compare(tableau[i][0],tableau[i][1],previous)
 			if score>max1[0]:
 				max1=[score,i]
 			elif score>max2[0]:
@@ -43,5 +43,6 @@ class Algos(object):
 			matrix.erosion(previous[0],0.9)
 			matrix.retribution(previous,success)
 			print matrix.getOut(previous[0])
+			previous=previous[:20]
 			return self.suggestions(matrix.getOut(previous[0]),previous)
 		return []
