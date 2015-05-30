@@ -8,9 +8,14 @@
     cursor: pointer;
 }
 
+.stage {
+  background: white
+}
+
 .node {
   stroke: #fff;
   stroke-width: 1.5px;
+  background:black;
 }
 
 .link {
@@ -20,6 +25,7 @@
 
 .node text {
   pointer-events: none;
-  font: 10px sans-serif;
+  stroke-opacity: .2;
+  font: 20px sans-serif;
 
 }

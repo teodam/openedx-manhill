@@ -134,29 +134,19 @@ function FourmisXBlock(runtime, element) {
       var width = 960,
       height = 500;
 
-      var color = d3.scale.category20();
+    var color = d3.scale.category20();
 
-      var force = d3.layout.force()
+    var force = d3.layout.force()
         .nodes(nodes)
         .links([])
         .charge(-120)
         .linkDistance(30)
         .size([width,height]);
 
-      var svg = d3.select("body").append("svg")
-      .attr("width", width)
-      .attr("height", height);
-
-      // Create the groups under svg
-      var gnodes = svg.selectAll('g.gnode')
-        .data(nodes)
-        .enter()
-        .append('g')
-        .classed('gnode', true);
-
-        // Append the labels to each group
-      var labels = gnodes.append("text")
-        .text(function(d) { return d.name; });
+    var svg = d3.select("body").select("svg")
+        .attr("class", "stage")
+        .attr("width", width)
+        .attr("height", height);
 
      var links = [];
       var n = matrice.length;
@@ -165,7 +155,7 @@ function FourmisXBlock(runtime, element) {
         var source = listJsonCours[matrice[i][0].trim()];
         var target = listJsonCours[matrice[i][1].trim()];
 
-        if ( source && target ) {
+        if ( (source != null) && (target != null) ) {
           var test = matrice[i][2]-matrice[i][3]
           links.push({"source":source,"target":target,"value":test>0?test:0})
         }
@@ -179,25 +169,31 @@ function FourmisXBlock(runtime, element) {
       force.links(links);
       force.linkDistance(200)
         .charge(charge)
-      .gravity(gravity)
+        .gravity(gravity)
+
+      // Append the labels to each group
 
 
-        var link = svg.selectAll(".link")
-          .data(links)
+      var link = svg.selectAll(".link")
+        .data(links)
         .enter().append("line")
-          .attr("class", "link")
-          .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+        .attr("class", "link")
+        .style("stroke-width", function(d) { return Math.sqrt(d.value); });
 
-        var node = gnodes.selectAll("circle")
-          .data(nodes)
-          .attr("class", "node")
-          .attr("r", 5)
-          .style("fill", function(d) { return color(d.group); })
-          .call(force.drag);
+      var node = svg.selectAll("circle.node")
+        .data(nodes)
+        .enter().append("g")
+        .attr("class", "node")
+        .attr("fill", function(d) { return color(d.group); })
+        .call(force.drag);
 
-          //TEXT
-          node.append("text")
-            .text(function(d, i) { return d.name; })
+      node.append("text")
+          .text(function(d) { return d.name; })
+
+      node.append("svg:circle")
+        .attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; })
+        .attr("r", 5)
 
       force.on("tick", function(e) {
 
@@ -206,11 +202,8 @@ function FourmisXBlock(runtime, element) {
           .attr("x2", function(d) { return d.target.x; })
           .attr("y2", function(d) { return d.target.y; });
 
-          node.attr("cx", function(d) { return d.x; })
-              .attr("cy", function(d) { return d.y; });
-
-            // Translate the groups
-           gnodes.attr("transform", function(d) {
+           // Translate the groups
+           node.attr("transform", function(d) {
              return 'translate(' + [d.x, d.y] + ')';
            });
          });
