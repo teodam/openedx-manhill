@@ -1,6 +1,8 @@
 """TO-DO: Write a description of what this XBlock is."""
 
 import pkg_resources
+import json
+
 from algos import Algos
 from Matrix import Matrix
 
@@ -26,6 +28,18 @@ class FourmisXBlock(XBlock):
     previous = List(
         default=[],scope=Scope.user_info,
         help="User path accross application"
+    )
+
+    eloj = Integer(
+        default=1000,
+        scope=Scope.user_info,
+        help="User elo"
+    )
+
+    elot = String(
+        default='{}',
+        scope=Scope.preferences,
+        help="Test elo"
     )
 
     matrice = String(
@@ -83,9 +97,25 @@ class FourmisXBlock(XBlock):
 
         datas = self.format(Algos().tick(m,self.previous,data["choix"]));
 
+        tab = json.loads(self.elot)
+        tab = self.eloTest(tab)
+
+        elos=Algos().elo(self.eloj, tab[previous[0]] , data["choix"])
+        self.eloj=elos[0]
+        tab[previous[0]]=elos[1]
+
+        self.elot = json.dumps(tab)
         self.matrice = m.toJSON()
 
         return datas
+
+    def eloTest(self,tab):
+        if previous[0] not in tab:
+            tab[previous[0]]=1000
+        
+        return tab
+
+
 
     # TO-DO: change this to create the scenarios you'd like to see in the
     # workbench while developing your XBlock.
