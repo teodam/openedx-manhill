@@ -1,5 +1,5 @@
 /* Javascript for FourmisXBlock. */
-var urlApi = "http://127.0.0.1:8000"
+var urlApi = "/"
 var listCours = [];
 var listJsonCours = {};
 var nodes = [];
@@ -213,17 +213,8 @@ function FourmisXBlock(runtime, element) {
 
     $(function () {
         /* Here's where you'd do things on page load. */
-        $.getJSON(urlApi+"/api/course_structure/v0/courses",function(datas){
+        $.getJSON("/api/course_structure/v0/courses",function(datas){
           var res  = datas.results;
-
-          res.push({"name":"cours1"});
-          res.push({"name":"cours2"});
-          res.push({"name":"cours3"});
-          res.push({"name":"cours4"});
-          res.push({"name":"cours5"});
-          res.push({"name":"cours6"});
-          res.push({"name":"cours7"});
-          res.push({"name":"cours8"});
 
           addElt(res);
 
