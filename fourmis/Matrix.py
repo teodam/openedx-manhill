@@ -11,6 +11,7 @@ class Matrix(object):
 
     def fromJSON(self,j):
         self.table = json.loads(j)
+        return self.table
 
     def same(self,i,j,previous):
        x = self.table[i][0]

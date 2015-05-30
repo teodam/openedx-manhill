@@ -1,6 +1,9 @@
 /* Javascript for FourmisXBlock. */
 var urlApi = "http://127.0.0.1:8000"
 var listCours = [];
+var listJsonCours = {};
+var nodes = [];
+
 var first = false;
 
 function FourmisXBlock(runtime, element) {
@@ -13,6 +16,8 @@ function FourmisXBlock(runtime, element) {
       var list = document.getElementById("list");
       var option;
 
+      var i =0;
+
       datas.forEach(function(elt){
         option = document.createElement("option");
         option.text = elt.name
@@ -20,6 +25,11 @@ function FourmisXBlock(runtime, element) {
 
         if ( !first ) {
           listCours.push(elt.name);
+          console.log("Update : "+elt.name+" = "+i);
+          listJsonCours[elt.name] = i;
+
+          nodes.push({"index":i,"name":elt.name,"group":i})
+          i++;
         }
 
         list.add(option);
@@ -27,21 +37,6 @@ function FourmisXBlock(runtime, element) {
 
       first = true;
     }
-
-    $.getJSON(urlApi+"/api/course_structure/v0/courses",function(datas){
-      var res  = datas.results;
-
-      res.push({"name":"cours1"});
-      res.push({"name":"cours2"});
-      res.push({"name":"cours3"});
-      res.push({"name":"cours4"});
-      res.push({"name":"cours5"});
-      res.push({"name":"cours6"});
-      res.push({"name":"cours7"});
-      res.push({"name":"cours8"});
-
-      addElt(res);
-    });
 
     function initLiens(datas) {
 
@@ -135,7 +130,122 @@ function FourmisXBlock(runtime, element) {
 
     document.getElementById("cours").style.display = 'none';
 
+    function showD3(matrice) {
+      var width = 960,
+      height = 500;
+
+      var color = d3.scale.category20();
+
+      var force = d3.layout.force()
+        .nodes(nodes)
+        .links([])
+        .charge(-120)
+        .linkDistance(30)
+        .size([width,height]);
+
+      var svg = d3.select("body").append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+      // Create the groups under svg
+      var gnodes = svg.selectAll('g.gnode')
+        .data(nodes)
+        .enter()
+        .append('g')
+        .classed('gnode', true);
+
+        // Append the labels to each group
+      var labels = gnodes.append("text")
+        .text(function(d) { return d.name; });
+
+     var links = [];
+      var n = matrice.length;
+
+      for(var i=0; i < n; i++) {
+        var source = listJsonCours[matrice[i][0].trim()];
+        var target = listJsonCours[matrice[i][1].trim()];
+
+        if ( source && target ) {
+          var test = matrice[i][2]-matrice[i][3]
+          links.push({"source":source,"target":target,"value":test>0?test:0})
+        }
+      }
+
+      var k = Math.sqrt(nodes.length / (width * height));
+      var charge = -10 / k;
+      var gravity = 100 * k;
+
+      force.nodes(nodes);
+      force.links(links);
+      force.linkDistance(200)
+        .charge(charge)
+      .gravity(gravity)
+
+
+        var link = svg.selectAll(".link")
+          .data(links)
+        .enter().append("line")
+          .attr("class", "link")
+          .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+        var node = gnodes.selectAll("circle")
+          .data(nodes)
+          .attr("class", "node")
+          .attr("r", 5)
+          .style("fill", function(d) { return color(d.group); })
+          .call(force.drag);
+
+          //TEXT
+          node.append("text")
+            .text(function(d, i) { return d.name; })
+
+      force.on("tick", function(e) {
+
+          link.attr("x1", function(d) { return d.source.x; })
+          .attr("y1", function(d) { return d.source.y; })
+          .attr("x2", function(d) { return d.target.x; })
+          .attr("y2", function(d) { return d.target.y; });
+
+          node.attr("cx", function(d) { return d.x; })
+              .attr("cy", function(d) { return d.y; });
+
+            // Translate the groups
+           gnodes.attr("transform", function(d) {
+             return 'translate(' + [d.x, d.y] + ')';
+           });
+         });
+
+      force.start();
+    }
+
     $(function () {
         /* Here's where you'd do things on page load. */
+        $.getJSON(urlApi+"/api/course_structure/v0/courses",function(datas){
+          var res  = datas.results;
+
+          res.push({"name":"cours1"});
+          res.push({"name":"cours2"});
+          res.push({"name":"cours3"});
+          res.push({"name":"cours4"});
+          res.push({"name":"cours5"});
+          res.push({"name":"cours6"});
+          res.push({"name":"cours7"});
+          res.push({"name":"cours8"});
+
+          addElt(res);
+
+          var matUrl = runtime.handlerUrl(element, 'matriceAlgo');
+
+          $.ajax({
+            type:"POST",
+            url:matUrl,
+            data:JSON.stringify({}),
+            success: showD3
+          });
+        });
+
+
+
     });
+
 }

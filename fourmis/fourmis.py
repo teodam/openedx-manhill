@@ -66,6 +66,10 @@ class FourmisXBlock(XBlock):
         self.previous.insert(0,data['id'])
         return {'success' : 'true','url': data['id']}
 
+    @XBlock.json_handler
+    def matriceAlgo(self,data,suffix=''):
+
+        return Matrix().fromJSON(self.matrice)
 
     @XBlock.json_handler
     def fourmisAlgo(self, data, suffix=''):

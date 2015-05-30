@@ -7,3 +7,19 @@
 .fourmis_block p {
     cursor: pointer;
 }
+
+.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.link {
+  stroke: #2176C7;
+  stroke-opacity: .6;
+}
+
+.node text {
+  pointer-events: none;
+  font: 10px sans-serif;
+
+}
