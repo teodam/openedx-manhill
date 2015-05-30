@@ -82,10 +82,6 @@ function FourmisXBlock(runtime, element) {
         });
     });
 
-    $('option', element).click(function(eventObject) {
-      console.log("coucou")
-    });
-
     function selectCourse(id) {
       $.ajax({
         type:"POST",
@@ -100,7 +96,6 @@ function FourmisXBlock(runtime, element) {
     $('.link_to').click(function(eventObject){
       id = $(this).attr('id_c');
       eventObject.preventDefault();
-      console.log(id);
       selectCourse(id)
     });
 
@@ -117,8 +112,6 @@ function FourmisXBlock(runtime, element) {
         var substring = String($(this).val()).toLocaleLowerCase();// get the current value of the input field.
         var n = listCours.length;
         var res = [];
-
-        console.log(listCours)
 
         for(var i =0; i < n ; i++) {
           var elt = String(listCours[i]);
