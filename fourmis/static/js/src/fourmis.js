@@ -83,7 +83,7 @@ function FourmisXBlock(runtime, element) {
         url:addUrl,
         data:JSON.stringify({"id":id}),
         success:function(data){
-          window.location.href = "http://127.0.0.1:8010/scenario/fourmis.0/"
+          window.location.href = "/courses/"+data['id']+'/courseware';
         }
       });
     }
