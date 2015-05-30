@@ -72,6 +72,10 @@ class FourmisXBlock(XBlock):
         frag.initialize_js('FourmisXBlock')
         return frag
 
+    def eloTest(self,tab):
+        if self.previous[0] not in tab:
+            tab[self.previous[0]]=1000
+        return tab
     # TO-DO: change this handler to perform your own actions.  You may need more
     # than one handler, or you may not need any handlers at all.
 
@@ -95,27 +99,20 @@ class FourmisXBlock(XBlock):
         mat = self.matrice
         m.fromJSON(mat)
 
-        datas = self.format(Algos().tick(m,self.previous,data["choix"]));
+        algo = Algos()
+        datas = self.format(algo.tick(m,self.previous,data["choix"]))
 
-        tab = json.loads(self.elot)
-        tab = self.eloTest(tab)
+    #    tab = json.loads(self.elot)
+    #    tab = self.eloTest(tab)
 
-        elos=Algos().elo(self.eloj, tab[previous[0]] , data["choix"])
-        self.eloj=elos[0]
-        tab[previous[0]]=elos[1]
+    #    elos= algo.elo(self.eloj, tab[self.previous[0]] , data["choix"])
+    #    self.eloj=elos[0]
+    #    tab[previous[0]]=elos[1]
 
-        self.elot = json.dumps(tab)
-        self.matrice = m.toJSON()
+    #    self.elot = json.dumps(tab)
+    #    self.matrice = m.toJSON()
 
         return datas
-
-    def eloTest(self,tab):
-        if previous[0] not in tab:
-            tab[previous[0]]=1000
-        
-        return tab
-
-
 
     # TO-DO: change this to create the scenarios you'd like to see in the
     # workbench while developing your XBlock.
