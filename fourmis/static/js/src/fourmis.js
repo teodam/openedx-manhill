@@ -1,5 +1,7 @@
 /* Javascript for FourmisXBlock. */
 var urlApi = "http://127.0.0.1:8000"
+var listCours = [];
+var first = false;
 
 function FourmisXBlock(runtime, element) {
 
@@ -14,17 +16,32 @@ function FourmisXBlock(runtime, element) {
       datas.forEach(function(elt){
         option = document.createElement("option");
         option.text = elt.name
+        option.value = elt.name
+
+        if ( !first ) {
+          listCours.push(elt.name);
+        }
+
         list.add(option);
       })
+
+      first = true;
     }
 
     $.getJSON(urlApi+"/api/course_structure/v0/courses",function(datas){
-      addElt(datas.results);
-    });
+      var res  = datas.results;
 
-    function updateVotes(votes) {
-      console.log(votes)
-    }
+      res.push({"name":"cours1"});
+      res.push({"name":"cours2"});
+      res.push({"name":"cours3"});
+      res.push({"name":"cours4"});
+      res.push({"name":"cours5"});
+      res.push({"name":"cours6"});
+      res.push({"name":"cours7"});
+      res.push({"name":"cours8"});
+
+      addElt(res);
+    });
 
     function initLiens(datas) {
 
@@ -65,10 +82,11 @@ function FourmisXBlock(runtime, element) {
         });
     });
 
-    $('.link_to').click(function(eventObject){
-      id = $(this).attr('id_c');
-      eventObject.preventDefault();
-      console.log(id);
+    $('option', element).click(function(eventObject) {
+      console.log("coucou")
+    });
+
+    function selectCourse(id) {
       $.ajax({
         type:"POST",
         url:addUrl,
@@ -77,7 +95,50 @@ function FourmisXBlock(runtime, element) {
           window.location.href = "http://127.0.0.1:8010/scenario/fourmis.0/"
         }
       });
+    }
+
+    $('.link_to').click(function(eventObject){
+      id = $(this).attr('id_c');
+      eventObject.preventDefault();
+      console.log(id);
+      selectCourse(id)
     });
+
+    $('#list').change(function(val){
+      var str = ""
+      $( "select option:selected" ).each(function() {
+         str += $( this ).text() + " ";
+       });
+
+       selectCourse(str)
+    })
+
+    $('#search').bind('input', function() {
+        var substring = String($(this).val()).toLocaleLowerCase();// get the current value of the input field.
+        var n = listCours.length;
+        var res = [];
+
+        console.log(listCours)
+
+        for(var i =0; i < n ; i++) {
+          var elt = String(listCours[i]);
+          var lower = elt.toLocaleLowerCase();
+
+          if ( lower.indexOf(substring) > -1 ) {
+              res.push({"name":elt})
+          }
+        }
+
+        $("#list").empty();
+
+        var option = document.createElement("option");
+        option.text = "--Select--";
+        option.value = "--Select--";
+        document.getElementById("list").add(option);
+
+        addElt(res)
+    });
+
 
     document.getElementById("cours").style.display = 'none';
 
