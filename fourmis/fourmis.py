@@ -59,6 +59,11 @@ class FourmisXBlock(XBlock):
 
     # TO-DO: change this view to display your data your own way.
     def student_view(self, context=None):
+        print "**************** MATRICE ***********************"
+        print self.matrice
+        print "**************** PREVIOUS **********************"
+        print self.previous
+
         """
         The primary view of the FourmisXBlock, shown to students
         when viewing courses.
@@ -110,7 +115,7 @@ class FourmisXBlock(XBlock):
     #    tab[previous[0]]=elos[1]
 
     #    self.elot = json.dumps(tab)
-    #    self.matrice = m.toJSON()
+        self.matrice = m.toJSON()
 
         return datas
 

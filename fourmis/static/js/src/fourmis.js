@@ -4,6 +4,9 @@ var listCours = [];
 var listJsonCours = {};
 var nodes = [];
 
+var foundId = {};
+
+
 var first = false;
 
 function FourmisXBlock(runtime, element) {
@@ -39,6 +42,8 @@ function FourmisXBlock(runtime, element) {
     }
 
     function initLiens(datas) {
+      console.log("initLiens");
+      console.log(datas);
 
       var lien1 = document.getElementById("lien1");
       var lien2 = document.getElementById("lien2");
@@ -83,7 +88,9 @@ function FourmisXBlock(runtime, element) {
         url:addUrl,
         data:JSON.stringify({"id":id}),
         success:function(data){
-          window.location.href = "/courses/"+data['id']+'/courseware';
+          console.log("Before redirect !")
+          console.log(foundId);
+          window.location.href = "/courses/"+foundId[data['url']]+'/courseware';
         }
       });
     }
@@ -97,7 +104,7 @@ function FourmisXBlock(runtime, element) {
     $('#list').change(function(val){
       var str = ""
       $( "select option:selected" ).each(function() {
-         str += $( this ).text() + " ";
+         str = $( this ).text();
        });
 
        selectCourse(str)
@@ -164,7 +171,7 @@ function FourmisXBlock(runtime, element) {
       var k = Math.sqrt(nodes.length / (width * height));
       var charge = -10 / k;
       var gravity = 100 * k;
-
+      console.log(links);
       force.nodes(nodes);
       force.links(links);
       force.linkDistance(200)
@@ -215,9 +222,14 @@ function FourmisXBlock(runtime, element) {
         /* Here's where you'd do things on page load. */
         $.getJSON("/api/course_structure/v0/courses",function(datas){
           var res  = datas.results;
+          console.log("JSON OUT");
+          console.log(datas);
 
+          for(var i =0 ; i < res.length;i++) {
+            foundId[res[i].name] = res[i].id;
+          }
+          
           addElt(res);
-
           var matUrl = runtime.handlerUrl(element, 'matriceAlgo');
 
           $.ajax({
