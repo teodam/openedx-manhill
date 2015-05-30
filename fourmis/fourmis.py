@@ -2,6 +2,7 @@
 
 import pkg_resources
 from algos import Algos
+from Matrix import Matrix
 
 from xblock.core import XBlock
 from xblock.fields import Scope, Integer, List, String
@@ -28,8 +29,8 @@ class FourmisXBlock(XBlock):
     )
 
     matrice = String(
-        default='',
-        scope=Scope.preferences
+        default='[]',
+        scope=Scope.preferences,
         help="Matrice d'informations"
     )
 
@@ -72,8 +73,13 @@ class FourmisXBlock(XBlock):
         An example handler, which increments the data.
         """
         # Just to show data coming in...
-        assert data['choix']
-        datas = [{"name":"cours1","id":"cours1","img":""},{"name":"cours2","id":"cours2","img":""},{"name":"cours3","id":"cours3","img":""}];
+        m = Matrix()
+        mat = self.matrice
+        m.fromJSON(mat)
+
+        datas = self.format(Algos().tick(m,self.previous,data["choix"]));
+
+        self.matrice = m.toJSON()
 
         return datas
 
@@ -89,3 +95,8 @@ class FourmisXBlock(XBlock):
                 </vertical_demo>
              """),
         ]
+    def format(self,arr):
+        datas = [{"id":""},{"id":""},{"id":""}];
+        for i in range(0,len(arr)):
+            datas[i]['id'] = arr[i][1]
+        return datas

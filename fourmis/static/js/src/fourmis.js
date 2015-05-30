@@ -32,12 +32,12 @@ function FourmisXBlock(runtime, element) {
       var lien2 = document.getElementById("lien2");
       var lien3 = document.getElementById("lien3");
 
-      $("#lien1").text(datas[0].name)
-      $("#lien1").attr("id",datas[0].id)
-      $("#lien2").text(datas[1].name)
-      $("#lien2").attr("id",datas[1].id)
-      $("#lien3").text(datas[2].name)
-      $("#lien3").attr("id",datas[2].id)
+      $("#lien1").text(datas[0].id)
+      $("#lien1").attr("id_c",datas[0].id)
+      $("#lien2").text(datas[1].id)
+      $("#lien2").attr("id_c",datas[1].id)
+      $("#lien3").text(datas[2].id)
+      $("#lien3").attr("id_c",datas[2].id)
 
       var img1 = document.getElementById("imglien1");
       var img2 = document.getElementById("imglien2");
@@ -56,18 +56,17 @@ function FourmisXBlock(runtime, element) {
         document.getElementById("choix").style.display = 'none';
 
         var rep = $(this).attr("id") == "oui";
-        console.log(rep);
 
         $.ajax({
             type: "POST",
             url: handlerUrl,
-            data: JSON.stringify({"choix": rep}),
+            data: JSON.stringify({"choix": rep ? 1 : 0}),
             success: initLiens
         });
     });
 
     $('.link_to').click(function(eventObject){
-      id = $(this).attr('id');
+      id = $(this).attr('id_c');
       eventObject.preventDefault();
       console.log(id);
       $.ajax({
@@ -75,7 +74,7 @@ function FourmisXBlock(runtime, element) {
         url:addUrl,
         data:JSON.stringify({"id":id}),
         success:function(data){
-          window.location.href = data["url"]
+          window.location.href = "http://127.0.0.1:8010/scenario/fourmis.0/"
         }
       });
     });
