@@ -9,8 +9,14 @@ class Algos(object):
 			y = previous[k][1]
 
 			if ( (x==i) and (y==j) ):
-				val =  (i > 20 ? (i-20)*0.1 : 0.1) # Oubli des cours (Au bout d'un certain on ne prend plus en compte le fait que l'utilisateur ait déjà suivi ce cours)
-				return (val > 1) ? 1 : val
+				if (i > 20 ):
+					val =  (i-20)*0.1
+				else:
+					val = 0.1
+				if ( val > 1 ):
+					return 1
+				else:
+					return val
 		return 1
 
 	def suggestions(self,tableau,previous):
